@@ -24,6 +24,7 @@ import {
   VueComponentArgs,
   CSSUtilitiesArgs,
   APIHookArgs,
+  ToolArguments,
 } from "./utils/types.js";
 
 class FrontendCodeGenerator {
@@ -56,19 +57,48 @@ class FrontendCodeGenerator {
       const { name, arguments: args } = request.params;
 
       try {
+        if (!args || typeof args !== "object") {
+          throw new McpError(ErrorCode.InvalidParams, "Faltan argumentos para la herramienta");
+        }
+
         switch (name) {
-          case "create_react_component":
-            return ReactGenerator.generateComponent(args as ReactComponentArgs);
-
-          case "create_vue_component":
-            return VueGenerator.generateComponent(args as VueComponentArgs);
-
-          case "create_css_utilities":
-            return CSSGenerator.generateUtilities(args as CSSUtilitiesArgs);
-
-          case "create_api_hook":
-            return HookGenerator.generateAPIHook(args as APIHookArgs);
-
+          case "create_react_component": {
+            const { name: compName } = args as Record<string, unknown>;
+            if (typeof compName !== "string") {
+              throw new McpError(
+                ErrorCode.InvalidParams,
+                "El nombre del componente es obligatorio"
+              );
+            }
+            return { ...ReactGenerator.generateComponent(args as unknown as ReactComponentArgs) };
+          }
+          case "create_vue_component": {
+            const { name: vueName } = args as Record<string, unknown>;
+            if (typeof vueName !== "string") {
+              throw new McpError(
+                ErrorCode.InvalidParams,
+                "El nombre del componente es obligatorio"
+              );
+            }
+            return { ...VueGenerator.generateComponent(args as unknown as VueComponentArgs) };
+          }
+          case "create_css_utilities": {
+            const { type } = args as Record<string, unknown>;
+            if (typeof type !== "string") {
+              throw new McpError(
+                ErrorCode.InvalidParams,
+                "El tipo de utilidades CSS es obligatorio"
+              );
+            }
+            return { ...CSSGenerator.generateUtilities(args as unknown as CSSUtilitiesArgs) };
+          }
+          case "create_api_hook": {
+            const { name: hookName } = args as Record<string, unknown>;
+            if (typeof hookName !== "string") {
+              throw new McpError(ErrorCode.InvalidParams, "El nombre del hook es obligatorio");
+            }
+            return { ...HookGenerator.generateAPIHook(args as unknown as APIHookArgs) };
+          }
           default:
             throw new McpError(ErrorCode.MethodNotFound, `Tool ${name} not found`);
         }

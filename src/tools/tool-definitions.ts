@@ -1,4 +1,6 @@
-export const toolDefinitions = [
+import { Tool } from "@modelcontextprotocol/sdk/types.js";
+
+export const toolDefinitions: Tool[] = [
   {
     name: "create_react_component",
     description: "Genera un componente React funcional",

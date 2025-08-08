@@ -20,9 +20,15 @@ export interface APIHookArgs {
   method?: "GET" | "POST" | "PUT" | "DELETE";
 }
 
-export interface MCPResponse {
-  content: Array<{
-    type: string;
-    text: string;
-  }>;
+// Tipos más específicos para MCP
+export interface MCPTextContent {
+  type: "text";
+  text: string;
 }
+
+export interface MCPResponse {
+  content: MCPTextContent[];
+}
+
+// Tipos para argumentos más flexibles
+export type ToolArguments = Record<string, unknown>;
