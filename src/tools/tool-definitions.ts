@@ -65,4 +65,40 @@ export const toolDefinitions: Tool[] = [
       required: ["name"],
     },
   },
+  {
+    name: "create_angular_component",
+    description: "Genera un componente Angular",
+    inputSchema: {
+      type: "object",
+      properties: {
+        name: { type: "string", description: "Nombre del componente" },
+        inlineTemplate: { type: "boolean", description: "Usar plantilla en línea", default: false },
+        inlineStyle: { type: "boolean", description: "Usar estilos en línea", default: false },
+        skipTests: {
+          type: "boolean",
+          description: "Omitir la generación de archivos de prueba",
+          default: false,
+        },
+      },
+      required: ["name"],
+    },
+  },
+  {
+    name: "create_svelte_component",
+    description: "Genera un componente Svelte",
+    inputSchema: {
+      type: "object",
+      properties: {
+        name: { type: "string", description: "Nombre del componente" },
+        typescript: { type: "boolean", description: "Usar TypeScript", default: false },
+        cssPreProcessor: {
+          type: "string",
+          enum: ["none", "scss", "less", "stylus"],
+          default: "none",
+          description: "Preprocesador CSS a usar",
+        },
+      },
+      required: ["name"],
+    },
+  },
 ];

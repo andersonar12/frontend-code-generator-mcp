@@ -14,6 +14,8 @@ import { ReactGenerator } from "./generators/react-generator.js";
 import { VueGenerator } from "./generators/vue-generator.js";
 import { CSSGenerator } from "./generators/css-generator.js";
 import { HookGenerator } from "./generators/hook-generator.js";
+import { AngularGenerator } from "./generators/angular-generator.js";
+import { SvelteGenerator } from "./generators/svelte-generator.js";
 
 // Importar definiciones de herramientas
 import { toolDefinitions } from "./tools/tool-definitions.js";
@@ -24,7 +26,8 @@ import {
   VueComponentArgs,
   CSSUtilitiesArgs,
   APIHookArgs,
-  ToolArguments,
+  AngularComponentArgs,
+  SvelteComponentArgs,
 } from "./utils/types.js";
 
 class FrontendCodeGenerator {
@@ -98,6 +101,28 @@ class FrontendCodeGenerator {
               throw new McpError(ErrorCode.InvalidParams, "El nombre del hook es obligatorio");
             }
             return { ...HookGenerator.generateAPIHook(args as unknown as APIHookArgs) };
+          }
+          case "create_angular_component": {
+            const { name: angularName } = args as Record<string, unknown>;
+            if (typeof angularName !== "string") {
+              throw new McpError(
+                ErrorCode.InvalidParams,
+                "El nombre del componente es obligatorio"
+              );
+            }
+            return {
+              ...AngularGenerator.generateComponent(args as unknown as AngularComponentArgs),
+            };
+          }
+          case "create_svelte_component": {
+            const { name: svelteName } = args as Record<string, unknown>;
+            if (typeof svelteName !== "string") {
+              throw new McpError(
+                ErrorCode.InvalidParams,
+                "El nombre del componente es obligatorio"
+              );
+            }
+            return { ...SvelteGenerator.generateComponent(args as unknown as SvelteComponentArgs) };
           }
           default:
             throw new McpError(ErrorCode.MethodNotFound, `Tool ${name} not found`);

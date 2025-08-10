@@ -32,3 +32,16 @@ export interface MCPResponse {
 
 // Tipos para argumentos más flexibles
 export type ToolArguments = Record<string, unknown>;
+
+export interface AngularComponentArgs {
+  name: string;
+  inlineTemplate?: boolean;
+  inlineStyle?: boolean;
+  skipTests?: boolean;
+}
+
+export interface SvelteComponentArgs {
+  name: string;
+  typescript?: boolean;
+  cssPreProcessor?: "none" | "scss" | "less" | "stylus";
+}
